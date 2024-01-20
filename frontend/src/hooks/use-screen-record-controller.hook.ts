@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const useScreenRecordController = (): [() => void, () => void, string | undefined] => {
+interface ScreenRecordControllerParams {
+    onStopRecording: () => void;
+}
+
+const useScreenRecordController = ({ onStopRecording }: ScreenRecordControllerParams): [() => void, () => void, string | undefined] => {
 
     const [media, setMedia] = useState<{ mediaStream: MediaStream, mediaRecorder: MediaRecorder }>();
     const [recordedVideoUrl, setRecordedVideoUrl] = useState<string>();
@@ -23,6 +27,7 @@ const useScreenRecordController = (): [() => void, () => void, string | undefine
 
     useEffect(() => {
         const stopCurrentRecording = () => {
+            onStopRecording?.();
             media?.mediaRecorder?.stop()
         };
 
@@ -37,7 +42,7 @@ const useScreenRecordController = (): [() => void, () => void, string | undefine
                 video.removeEventListener('ended', stopCurrentRecording);
             }
         }
-    }, [media?.mediaStream, media?.mediaRecorder]);
+    }, [media?.mediaStream, media?.mediaRecorder, onStopRecording]);
 
     const startRecord = async () => {
         const mediaStream = await navigator.mediaDevices.getDisplayMedia({
