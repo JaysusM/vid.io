@@ -1,5 +1,6 @@
 "use client";
 import useScreenRecordController from "@hooks/use-screen-record-controller.hook";
+import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
 import { useState } from "react";
 import { DownloadIcon, RecordIcon, StopIcon } from "ui/icons";
@@ -11,11 +12,16 @@ enum RecordingStatus {
 }
 
 const Controller = () => {
-  const [startRecord, stopRecord, media] = useScreenRecordController({
-    onStopRecording: () => {
-      setRecordingStatus(RecordingStatus.RECORDED);
-    },
-  });
+  const [startRecord, stopRecord, media, canRecord] = useScreenRecordController(
+    {
+      onStopRecording: () => {
+        setRecordingStatus(RecordingStatus.RECORDED);
+      },
+      onError: () => {
+        setRecordingStatus(RecordingStatus.NONE);
+      },
+    }
+  );
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
     RecordingStatus.NONE
   );
@@ -38,36 +44,38 @@ const Controller = () => {
     downloadLink.click();
   };
 
+  if (!canRecord) {
+    return (
+      <Alert>
+        <AlertTitle>Browser doesn&apos;t support recording.</AlertTitle>
+        <AlertDescription>
+          Please try again using a different browser.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <>
       {recordingStatus === RecordingStatus.NONE && (
         <Button
           onClick={handleRecordStart}
-          className="animate-bounce ease-linear max-w-fit self-center hover:pointer"
+          className="animate-bounce ease-linear"
         >
           Record your screen! <RecordIcon size="20px" className="ml-2" />
         </Button>
       )}
       {recordingStatus === RecordingStatus.RECORDING && (
-        <Button
-          onClick={handleRecordStop}
-          className="max-w-fit self-center hover:pointer"
-        >
+        <Button onClick={handleRecordStop}>
           Stop recording <StopIcon size="20px" className="ml-2" />
         </Button>
       )}
       {recordingStatus === RecordingStatus.RECORDED && (
-        <div className="flex flex-row self-center gap-3">
-          <Button
-            onClick={handleDownloadRecording}
-            className="max-w-fit self-center hover:pointer"
-          >
+        <div className="flex flex-row gap-3">
+          <Button onClick={handleDownloadRecording}>
             Download recording <DownloadIcon size="20px" className="ml-2" />
           </Button>
-          <Button
-            onClick={handleRecordStart}
-            className="ease-linear max-w-fit self-center hover:pointer"
-          >
+          <Button onClick={handleRecordStart}>
             Record another clip! <RecordIcon size="20px" className="ml-2" />
           </Button>
         </div>
