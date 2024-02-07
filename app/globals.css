@@ -3,11 +3,6 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@200,500&display=swap');
 
-body {
-  min-width: 100vw;
-  min-height: 100vh;
-}
-
 h1 {
   font-size: 4rem;
   line-height: 4.5rem;
