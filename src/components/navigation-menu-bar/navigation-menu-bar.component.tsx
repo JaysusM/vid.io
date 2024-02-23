@@ -48,8 +48,8 @@ const NavigationMenuBar = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end",
-        marginRight: "30px",
-        marginTop: "10px",
+        marginRight: "20px",
+        marginTop: "20px",
         alignItems: "center",
         marginLeft: "auto",
       }}
@@ -67,7 +67,7 @@ const NavigationMenuBar = () => {
             <>
               <NavigationMenuTrigger>
                 <Image
-                  src={user.picture || "/default_avatar.jpeg"}
+                  src={"/default_avatar.jpeg"}
                   alt="user profile picture"
                   height={25}
                   width={25}
@@ -81,14 +81,14 @@ const NavigationMenuBar = () => {
               <NavigationMenuContent>
                 <ul className="flex flex-col w-[150px]">
                   <ListItem
-                    key="logout"
-                    title="Log out"
-                    href="/api/auth/logout"
-                  />
-                  <ListItem
                     key="library"
                     title="Your Library"
                     href="/my-library"
+                  />
+                  <ListItem
+                    key="logout"
+                    title="Log out"
+                    href="/api/auth/logout"
                   />
                 </ul>
               </NavigationMenuContent>

@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { upload } from '@vercel/blob/client';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 interface ScreenRecordControllerParams {
     onStopRecording: () => void;
@@ -8,16 +10,31 @@ interface ScreenRecordControllerParams {
 const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, string | undefined, boolean] => {
 
     const [media, setMedia] = useState<{ mediaStream: MediaStream, mediaRecorder: MediaRecorder }>();
-    const [recordedVideoUrl, setRecordedVideoUrl] = useState<string>();
+    const [videoUrl, setVideoUrl] = useState<string>();
     const [canRecord, setCanRecord] = useState<boolean>(true);
+    const { user } = useUser();
+
+    const triggerVideoUpload = useCallback(async (recordedVideo: Blob) => {
+        if (user) {
+            const newBlob = await upload(`${user.email || user.nickname}${user.name}_${Date.now()}`, recordedVideo as Blob, {
+                access: 'public',
+                contentType: 'video/webm',
+                handleUploadUrl: '/api/upload-video',
+                clientPayload: JSON.stringify({ email: user.email, name: user.name, nickname: user.nickname })
+            });
+            setVideoUrl(newBlob.url);
+        } else if (recordedVideo) {
+            setVideoUrl(URL.createObjectURL(recordedVideo));
+        }
+    }, [user]);
 
     useEffect(() => {
         setCanRecord(!!navigator.mediaDevices.getDisplayMedia);
     }, []);
 
     useEffect(() => {
-        const handleDataAvailable = (event: BlobEvent) => {
-            setRecordedVideoUrl(URL.createObjectURL(event.data));
+        const handleDataAvailable = async (event: BlobEvent) => {
+            await triggerVideoUpload(event.data);
         };
 
         if (media?.mediaRecorder) {
@@ -29,12 +46,12 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 media.mediaRecorder.removeEventListener('dataavailable', handleDataAvailable);
             }
         }
-    }, [media?.mediaRecorder]);
+    }, [media?.mediaRecorder, triggerVideoUpload]);
 
     useEffect(() => {
-        const stopCurrentRecording = () => {
+        const stopCurrentRecording = async () => {
             onStopRecording?.();
-            media?.mediaRecorder?.stop()
+            media?.mediaRecorder?.stop();
         };
 
         if (media?.mediaStream) {
@@ -48,7 +65,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 video.removeEventListener('ended', stopCurrentRecording);
             }
         }
-    }, [media?.mediaStream, media?.mediaRecorder, onStopRecording]);
+    }, [media?.mediaStream, media?.mediaRecorder, onStopRecording, triggerVideoUpload]);
 
     const startRecord = async () => {
         try {
@@ -68,7 +85,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
         }
     }
 
-    const stopRecord = () => {
+    const stopRecord = async () => {
         if (!media?.mediaStream?.getVideoTracks())
             throw new Error("Media is not defined");
 
@@ -76,7 +93,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
         media.mediaStream.getVideoTracks().forEach(track => track.stop());
     }
 
-    return [startRecord, stopRecord, recordedVideoUrl, canRecord];
+    return [startRecord, stopRecord, videoUrl, canRecord];
 
 }
 
