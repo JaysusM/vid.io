@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useEffect, useState } from 'react';
 import { upload } from '@vercel/blob/client';
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -7,24 +8,26 @@ interface ScreenRecordControllerParams {
     onError: (error: string) => void;
 }
 
-const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, string | undefined, boolean] => {
+const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, { url: string, name: string } | undefined, boolean] => {
 
     const [media, setMedia] = useState<{ mediaStream: MediaStream, mediaRecorder: MediaRecorder }>();
-    const [videoUrl, setVideoUrl] = useState<string>();
+    const [video, setVideo] = useState<{ url: string, name: string }>();
     const [canRecord, setCanRecord] = useState<boolean>(true);
     const { user } = useUser();
 
     const triggerVideoUpload = useCallback(async (recordedVideo: Blob) => {
         if (user) {
-            const newBlob = await upload(`${user.email || user.nickname}${user.name}_${Date.now()}`, recordedVideo as Blob, {
+            const blobName = `${user.email || user.nickname}${user.name}_${Date.now()}`;
+            const newBlob = await upload(blobName, recordedVideo as Blob, {
                 access: 'public',
                 contentType: 'video/webm',
                 handleUploadUrl: '/api/upload-video',
                 clientPayload: JSON.stringify({ email: user.email, name: user.name, nickname: user.nickname })
             });
-            setVideoUrl(newBlob.url);
+            console.log({ newBlob });
+            setVideo({ url: newBlob.url, name: blobName });
         } else if (recordedVideo) {
-            setVideoUrl(URL.createObjectURL(recordedVideo));
+            setVideo({ url: URL.createObjectURL(recordedVideo), name: `vidio_${new Date().getTime()}.webm` });
         }
     }, [user]);
 
@@ -93,7 +96,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
         media.mediaStream.getVideoTracks().forEach(track => track.stop());
     }
 
-    return [startRecord, stopRecord, videoUrl, canRecord];
+    return [startRecord, stopRecord, video, canRecord];
 
 }
 

@@ -1,4 +1,3 @@
-"use client";
 import Controller from "@components/controller/controller.component";
 
 export default function Home() {

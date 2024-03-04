@@ -1,5 +1,4 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import useScreenRecordController from "@hooks/use-screen-record-controller.hook";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
@@ -13,15 +12,16 @@ enum RecordingStatus {
 }
 
 const Controller = () => {
-  const [startRecord, stopRecord, mediaUrl, canRecord] =
-    useScreenRecordController({
+  const [startRecord, stopRecord, video, canRecord] = useScreenRecordController(
+    {
       onStopRecording: () => {
         setRecordingStatus(RecordingStatus.RECORDED);
       },
       onError: () => {
         setRecordingStatus(RecordingStatus.NONE);
       },
-    });
+    }
+  );
   const [recordingStatus, setRecordingStatus] = useState<RecordingStatus>(
     RecordingStatus.NONE
   );
@@ -29,7 +29,7 @@ const Controller = () => {
 
   useEffect(() => {
     setShowPreview(false);
-  }, [mediaUrl]);
+  }, [video]);
 
   const handleRecordStart = () => {
     setRecordingStatus(RecordingStatus.RECORDING);
@@ -43,7 +43,7 @@ const Controller = () => {
 
   const handleDownloadRecording = () => {
     const downloadLink = document.createElement("a");
-    downloadLink.href = mediaUrl!;
+    downloadLink.href = video!.url;
     downloadLink.target = "_blank";
     downloadLink.download = `vidio_${new Date().getTime()}.webm`;
     downloadLink.click();
@@ -88,7 +88,7 @@ const Controller = () => {
             </Button>
           </div>
           {showPreview && (
-            <video src={mediaUrl} controls className="max-w-[700px] pt-10" />
+            <video src={video!.url} controls className="max-w-[700px] pt-10" />
           )}
         </div>
       )}

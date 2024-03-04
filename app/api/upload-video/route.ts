@@ -1,5 +1,6 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
+import Database from '@utils/db';
 
 export async function POST(request: Request): Promise<NextResponse> {
     const body = (await request.json()) as HandleUploadBody;
@@ -17,7 +18,10 @@ export async function POST(request: Request): Promise<NextResponse> {
                 };
             },
             onUploadCompleted: async ({ blob, tokenPayload }) => {
-                console.log('blob upload completed', blob, tokenPayload);
+                await Database.getInstance().getConnection().collection('videos').insertOne({
+                    url: blob.url,
+                    ...JSON.parse(tokenPayload as string),
+                });
             },
         });
 
