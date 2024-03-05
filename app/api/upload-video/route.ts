@@ -10,7 +10,9 @@ export async function POST(request: Request): Promise<NextResponse> {
             body,
             request,
             onBeforeGenerateToken: async (
-                clientPayload: string
+                _pathname: string,
+                clientPayload: string | null,
+                _multipart: boolean
             ) => {
                 return {
                     allowedContentTypes: ['video/webm'],
@@ -18,10 +20,14 @@ export async function POST(request: Request): Promise<NextResponse> {
                 };
             },
             onUploadCompleted: async ({ blob, tokenPayload }) => {
-                await Database.getInstance().getConnection().collection('videos').insertOne({
-                    url: blob.url,
-                    ...JSON.parse(tokenPayload as string),
-                });
+                const db = await Database.getInstance();
+                const user = await db.getConnection().collection('users').findOne({ email: tokenPayload });
+                if (user) {
+                    db.getConnection().collection('videos').insertOne({
+                        url: blob.url,
+                        userId: user._id,
+                    });
+                }
             },
         });
 

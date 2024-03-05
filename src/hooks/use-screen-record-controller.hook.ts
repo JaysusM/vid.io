@@ -22,9 +22,8 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 access: 'public',
                 contentType: 'video/webm',
                 handleUploadUrl: '/api/upload-video',
-                clientPayload: JSON.stringify({ email: user.email, name: user.name, nickname: user.nickname })
+                clientPayload: "test@gmail.com"
             });
-            console.log({ newBlob });
             setVideo({ url: newBlob.url, name: blobName });
         } else if (recordedVideo) {
             setVideo({ url: URL.createObjectURL(recordedVideo), name: `vidio_${new Date().getTime()}.webm` });
