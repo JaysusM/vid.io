@@ -22,7 +22,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 access: 'public',
                 contentType: 'video/webm',
                 handleUploadUrl: '/api/upload-video',
-                clientPayload: "test@gmail.com"
+                clientPayload: user.email!
             });
             setVideo({ url: newBlob.url, name: blobName });
         } else if (recordedVideo) {
