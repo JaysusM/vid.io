@@ -1,10 +1,10 @@
 import { handleAuth, handleCallback } from '@auth0/nextjs-auth0';
 import { User } from '@models/models';
+import Database from '@utils/db';
 
 const afterCallback = async (req, session, state) => {
+    await Database.connect();
     const { user } = session;
-
-    console.log({ user });
 
     await User.findOneAndUpdate({
         email: user.email
