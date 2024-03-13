@@ -1,41 +1,30 @@
-import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import Database from '@utils/db';
 
 export async function POST(request: Request): Promise<NextResponse> {
-    const body = (await request.json()) as HandleUploadBody;
+    const { searchParams } = new URL(request.url);
+    const videoName = searchParams.get('videoName');
+    const userEmail = searchParams.get('userEmail');
 
-    try {
-        const jsonResponse = await handleUpload({
-            body,
-            request,
-            onBeforeGenerateToken: async (
-                _pathname: string,
-                clientPayload: string | null,
-                _multipart: boolean
-            ) => {
-                return {
-                    allowedContentTypes: ['video/webm'],
-                    tokenPayload: clientPayload,
-                };
-            },
-            onUploadCompleted: async ({ blob, tokenPayload }) => {
-                const db = await Database.getInstance();
-                const user = await db.getConnection().collection('users').findOne({ email: tokenPayload });
-                if (user) {
-                    db.getConnection().collection('videos').insertOne({
-                        url: blob.url,
-                        userId: user._id,
-                    });
-                }
-            },
+    const dbConnection = await Database.getInstance().getConnection();
+    const user = await dbConnection.collection('users').findOne({ email: userEmail });
+
+    if (user) {
+        const blob = await put(videoName!, request.body!, {
+            access: 'public',
         });
 
-        return NextResponse.json(jsonResponse);
-    } catch (error) {
-        return NextResponse.json(
-            { error: (error as Error).message },
-            { status: 400 },
-        );
+        const { insertedId } = await dbConnection.collection('videos').insertOne({
+            url: blob.url,
+            userId: user._id,
+            name: videoName
+        });
+
+        const video = await dbConnection.collection('videos').findOne({ _id: insertedId });
+
+        return NextResponse.json({ video });
     }
+
+    return NextResponse.json({ status: 401 });
 }

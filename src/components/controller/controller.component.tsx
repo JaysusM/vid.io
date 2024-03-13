@@ -1,9 +1,19 @@
 "use client";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import useCreateShareableVideoLink from "@hooks/use-create-shareable-video-link.hook";
 import useScreenRecordController from "@hooks/use-screen-record-controller.hook";
 import { Alert, AlertDescription, AlertTitle } from "@ui/alert";
 import { Button } from "@ui/button";
 import { useEffect, useState } from "react";
-import { DownloadIcon, PlayIcon, RecordIcon, StopIcon } from "ui/icons";
+import { toast } from "sonner";
+import {
+  CopyIcon,
+  DownloadIcon,
+  PlayIcon,
+  RecordIcon,
+  ShareIcon,
+  StopIcon,
+} from "ui/icons";
 
 enum RecordingStatus {
   NONE = "NONE",
@@ -26,6 +36,10 @@ const Controller = () => {
     RecordingStatus.NONE
   );
   const [showPreview, setShowPreview] = useState(false);
+  const { user } = useUser();
+  const [createShareableVideoLink, { isCreatingLink }] =
+    useCreateShareableVideoLink(user);
+  const [shareableLink, setShareableLink] = useState<string>();
 
   useEffect(() => {
     setShowPreview(false);
@@ -42,11 +56,20 @@ const Controller = () => {
   };
 
   const handleDownloadRecording = () => {
+    if (!video) throw new Error("Video not found");
     const downloadLink = document.createElement("a");
-    downloadLink.href = video!.url;
+    downloadLink.href = video.url;
     downloadLink.target = "_blank";
-    downloadLink.download = `vidio_${new Date().getTime()}.webm`;
+    downloadLink.download = video!.name;
     downloadLink.click();
+  };
+
+  const handleVideoShare = async () => {
+    if (!video) throw new Error("Video not found");
+    const link = await createShareableVideoLink(video.file);
+    navigator.clipboard.writeText(link);
+    toast.success("Link copied to clipboard");
+    setShareableLink(link);
   };
 
   if (!canRecord) {
@@ -86,6 +109,26 @@ const Controller = () => {
             <Button onClick={handleRecordStart}>
               Record another clip! <RecordIcon size="20px" className="ml-2" />
             </Button>
+            {user &&
+              !shareableLink &&
+              (!isCreatingLink ? (
+                <Button onClick={handleVideoShare}>
+                  Create shareable link{" "}
+                  <ShareIcon size="20px" className="ml-2" />
+                </Button>
+              ) : (
+                <Button disabled>
+                  Creating shareable link{" "}
+                  <ShareIcon size="20px" className="ml-2" />
+                </Button>
+              ))}
+            {shareableLink && (
+              <Button
+                onClick={() => navigator.clipboard.writeText(shareableLink)}
+              >
+                Copy link <CopyIcon size="20px" className="ml-2" />
+              </Button>
+            )}
           </div>
           {showPreview && (
             <video src={video!.url} controls className="max-w-[700px] pt-10" />

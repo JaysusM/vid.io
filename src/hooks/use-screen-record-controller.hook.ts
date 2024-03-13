@@ -1,34 +1,16 @@
 "use client";
 import { useCallback, useEffect, useState } from 'react';
-import { upload } from '@vercel/blob/client';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 interface ScreenRecordControllerParams {
     onStopRecording: () => void;
     onError: (error: string) => void;
 }
 
-const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, { url: string, name: string } | undefined, boolean] => {
+const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, { file: Blob, url: string, name: string } | undefined, boolean] => {
 
     const [media, setMedia] = useState<{ mediaStream: MediaStream, mediaRecorder: MediaRecorder }>();
-    const [video, setVideo] = useState<{ url: string, name: string }>();
+    const [video, setVideo] = useState<{ file: Blob, url: string, name: string }>();
     const [canRecord, setCanRecord] = useState<boolean>(true);
-    const { user } = useUser();
-
-    const triggerVideoUpload = useCallback(async (recordedVideo: Blob) => {
-        if (user) {
-            const blobName = `${user.email || user.nickname}${user.name}_${Date.now()}`;
-            const newBlob = await upload(blobName, recordedVideo as Blob, {
-                access: 'public',
-                contentType: 'video/webm',
-                handleUploadUrl: '/api/upload-video',
-                clientPayload: user.email!
-            });
-            setVideo({ url: newBlob.url, name: blobName });
-        } else if (recordedVideo) {
-            setVideo({ url: URL.createObjectURL(recordedVideo), name: `vidio_${new Date().getTime()}.webm` });
-        }
-    }, [user]);
 
     useEffect(() => {
         setCanRecord(!!navigator.mediaDevices.getDisplayMedia);
@@ -36,7 +18,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
 
     useEffect(() => {
         const handleDataAvailable = async (event: BlobEvent) => {
-            await triggerVideoUpload(event.data);
+            setVideo({ file: event.data, url: URL.createObjectURL(event.data), name: `ScreenRecording_${new Date().getTime()}.webm` });
         };
 
         if (media?.mediaRecorder) {
@@ -48,7 +30,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 media.mediaRecorder.removeEventListener('dataavailable', handleDataAvailable);
             }
         }
-    }, [media?.mediaRecorder, triggerVideoUpload]);
+    }, [media?.mediaRecorder]);
 
     useEffect(() => {
         const stopCurrentRecording = async () => {
@@ -67,7 +49,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 video.removeEventListener('ended', stopCurrentRecording);
             }
         }
-    }, [media?.mediaStream, media?.mediaRecorder, onStopRecording, triggerVideoUpload]);
+    }, [media?.mediaStream, media?.mediaRecorder, onStopRecording]);
 
     const startRecord = async () => {
         try {
