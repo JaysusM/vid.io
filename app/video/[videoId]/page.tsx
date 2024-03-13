@@ -1,21 +1,11 @@
+import { User, Video } from "@models/models";
 import Database from "@utils/db";
-import { ObjectId } from "bson";
 import Image from "next/image";
 
-const Video = async ({ params }: { params: { videoId: string } }) => {
-  const db = await Database.getInstance();
-
-  const video = await db
-    .getConnection()
-    .collection("videos")
-    .findOne({ _id: new ObjectId(params.videoId) });
-
-  const user = video
-    ? await db
-        .getConnection()
-        .collection("users")
-        .findOne({ _id: new ObjectId(video.userId) })
-    : null;
+const VideoPage = async ({ params }: { params: { videoId: string } }) => {
+  await Database.connect();
+  const video = await Video.findById(params.videoId);
+  const user = await User.findById(video?.userId);
 
   return (
     <div
@@ -40,7 +30,7 @@ const Video = async ({ params }: { params: { videoId: string } }) => {
               }}
             >
               <Image
-                src={user.picture}
+                src={user.picture || "/default_avatar.jpeg"}
                 alt="Profile"
                 width={50}
                 height={50}
@@ -59,4 +49,4 @@ const Video = async ({ params }: { params: { videoId: string } }) => {
   );
 };
 
-export default Video;
+export default VideoPage;

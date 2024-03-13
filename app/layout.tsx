@@ -1,5 +1,4 @@
 "use client";
-
 import NavigationMenuBar from "@components/navigation-menu-bar/navigation-menu-bar.component";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";

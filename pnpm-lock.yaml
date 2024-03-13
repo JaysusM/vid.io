@@ -13,9 +13,6 @@ dependencies:
   '@vercel/blob':
     specifier: ^0.21.0
     version: 0.21.0
-  bson:
-    specifier: ^6.5.0
-    version: 6.5.0
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
