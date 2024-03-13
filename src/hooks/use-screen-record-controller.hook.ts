@@ -1,15 +1,13 @@
 "use client";
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ScreenRecordControllerParams {
-    onStopRecording: () => void;
+    onStopRecording: (video: { file: Blob, url: string, name: string }) => void;
     onError: (error: string) => void;
 }
 
-const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, { file: Blob, url: string, name: string } | undefined, boolean] => {
-
+const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordControllerParams): [() => void, () => void, boolean] => {
     const [media, setMedia] = useState<{ mediaStream: MediaStream, mediaRecorder: MediaRecorder }>();
-    const [video, setVideo] = useState<{ file: Blob, url: string, name: string }>();
     const [canRecord, setCanRecord] = useState<boolean>(true);
 
     useEffect(() => {
@@ -18,7 +16,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
 
     useEffect(() => {
         const handleDataAvailable = async (event: BlobEvent) => {
-            setVideo({ file: event.data, url: URL.createObjectURL(event.data), name: `ScreenRecording_${new Date().getTime()}.webm` });
+            onStopRecording?.({ file: event.data, url: URL.createObjectURL(event.data), name: `ScreenRecording_${new Date().getTime()}.webm` });
         };
 
         if (media?.mediaRecorder) {
@@ -30,11 +28,10 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
                 media.mediaRecorder.removeEventListener('dataavailable', handleDataAvailable);
             }
         }
-    }, [media?.mediaRecorder]);
+    }, [media?.mediaRecorder, onStopRecording]);
 
     useEffect(() => {
         const stopCurrentRecording = async () => {
-            onStopRecording?.();
             media?.mediaRecorder?.stop();
         };
 
@@ -77,7 +74,7 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
         media.mediaStream.getVideoTracks().forEach(track => track.stop());
     }
 
-    return [startRecord, stopRecord, video, canRecord];
+    return [startRecord, stopRecord, canRecord];
 
 }
 

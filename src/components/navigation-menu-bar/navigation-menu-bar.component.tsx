@@ -67,7 +67,7 @@ const NavigationMenuBar = () => {
             <>
               <NavigationMenuTrigger>
                 <Image
-                  src={"/default_avatar.jpeg"}
+                  src={user.picture || "/default_avatar.jpeg"}
                   alt="user profile picture"
                   height={25}
                   width={25}
