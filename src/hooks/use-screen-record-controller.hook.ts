@@ -51,7 +51,9 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
     const startRecord = async () => {
         try {
             const mediaStream = await navigator.mediaDevices.getDisplayMedia({
-                video: { frameRate: { ideal: 30 } },
+                video: {
+                    frameRate: { ideal: 30 }
+                },
                 audio: true
             });
 

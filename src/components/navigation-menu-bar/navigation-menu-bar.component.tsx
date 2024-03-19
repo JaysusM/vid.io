@@ -13,7 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { forwardRef, ElementRef, ComponentPropsWithoutRef } from "react";
 
-import { cn } from "ui/lib/utils";
+import { cn } from "ui/components/lib/utils";
 
 const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
   ({ className, title, ...props }, ref) => {
@@ -38,7 +38,7 @@ const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
 ListItem.displayName = "ListItem";
 
 const NavigationMenuBar = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   return (
     <NavigationMenu
@@ -56,7 +56,7 @@ const NavigationMenuBar = () => {
     >
       <NavigationMenuList>
         <NavigationMenuItem>
-          {!user && !isLoading && (
+          {!user && (
             <Link href="/api/auth/login" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Sign In

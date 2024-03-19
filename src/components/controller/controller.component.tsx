@@ -20,7 +20,7 @@ const Controller = () => {
       console.log("Recording stopped");
       console.log({ video });
       setVideo(video);
-      router.push(`/video-preview`);
+      router.push(`/video/preview`);
     },
     onError: () => {
       setRecordingStatus(RecordingStatus.NONE);

@@ -4,6 +4,7 @@ type VideoContextType = {
   file: Blob;
   url: string;
   name: string;
+  id?: string;
 };
 
 const VideoContext = createContext<

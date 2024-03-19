@@ -2,7 +2,7 @@
 import NavigationMenuBar from "@components/navigation-menu-bar/navigation-menu-bar.component";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { Toaster } from "sonner";
+import { Toaster } from "@ui/sonner";
 import VideoContextProvider from "@context/video-context.provider";
 
 export default function RootLayout({
