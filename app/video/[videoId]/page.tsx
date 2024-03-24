@@ -4,10 +4,14 @@ import Database from "@utils/db";
 import { getDistanceDate } from "@utils/utils";
 import Image from "next/image";
 
-const VideoPage = async ({ params }: { params: { videoId: string } }) => {
+const getData = async (videoId: string) => {
   await Database.connect();
-  const video = await Video.findById(params.videoId);
+  const video = await Video.findById(videoId);
   const author = await User.findById(video?.userId);
+  return { video, author };
+};
+const VideoPage = async ({ params }: { params: { videoId: string } }) => {
+  const { video, author } = await getData(params.videoId);
 
   return (
     <div className="flex flex-col justify-start items-center min-h-[calc(95vh-40px)] mt-[15px]">

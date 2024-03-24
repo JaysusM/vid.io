@@ -45,7 +45,7 @@ const NavigationMenuBar = () => {
       <Link
         href="/"
         passHref
-        className="select-none title flex flex-row justify-end items-end mr-auto ml-[20px]"
+        className="select-none code-font flex flex-row justify-end items-end mr-auto ml-[20px]"
       >
         <h2>VID</h2>
         <span className="pb-[4px]">.IO</span>
