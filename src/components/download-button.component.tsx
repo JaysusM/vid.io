@@ -5,17 +5,23 @@ import { DownloadIcon } from "ui/icons";
 
 interface DownloadButtonProps {
   className?: string;
+  videoUrl?: string;
 }
 
-const DownloadButton: React.FC<DownloadButtonProps> = ({ className }) => {
+const DownloadButton: React.FC<DownloadButtonProps> = ({
+  className,
+  videoUrl,
+}) => {
   const [video] = useVideoContext();
 
   const handleDownloadRecording = () => {
-    if (!video) throw new Error("Video not found");
+    if (!videoUrl && !video) throw new Error("Video not found");
     const downloadLink = document.createElement("a");
-    downloadLink.href = video.url;
+    downloadLink.href = videoUrl ?? (video?.url || "#");
     downloadLink.target = "_blank";
-    downloadLink.download = video!.name;
+    downloadLink.download = videoUrl
+      ? videoUrl.split("/").reverse()[0]
+      : video!.name;
     downloadLink.click();
   };
 

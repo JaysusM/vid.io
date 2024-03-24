@@ -9,11 +9,17 @@ import {
   NavigationMenuList,
 } from "@ui/navigation-menu";
 
+import { Source_Code_Pro } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import { forwardRef, ElementRef, ComponentPropsWithoutRef } from "react";
 
 import { cn } from "ui/components/lib/utils";
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
   ({ className, title, ...props }, ref) => {
@@ -45,7 +51,7 @@ const NavigationMenuBar = () => {
       <Link
         href="/"
         passHref
-        className="select-none code-font flex flex-row justify-end items-end mr-auto ml-[20px]"
+        className={`select-none flex flex-row justify-end items-end mr-auto ml-[20px] ${sourceCodePro.className}`}
       >
         <h2>VID</h2>
         <span className="pb-[4px]">.IO</span>

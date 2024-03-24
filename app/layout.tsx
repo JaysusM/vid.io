@@ -4,14 +4,19 @@ import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { Toaster } from "@ui/sonner";
 import VideoContextProvider from "@context/video-context.provider";
+import { Mulish } from "next/font/google";
 
+const mulish = Mulish({
+  subsets: ["latin"],
+  display: "swap",
+});
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={mulish.className}>
       <body className="relative h-full w-full bg-slate-950">
         <UserProvider>
           <VideoContextProvider>

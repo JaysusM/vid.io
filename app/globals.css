@@ -1,17 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@200,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;1,200&display=swap');
-
-h1, p {
-  font-family: 'Rubik', sans-serif;
-}
 
 h1 {
   font-size: 4rem;
   line-height: 4.5rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 h2 {
@@ -22,13 +16,6 @@ h2 {
 
 p {
   font-weight: 200;
-}
-
-.code-font {
-  font-family: "Source Code Pro", monospace;
-  font-optical-sizing: auto;
-  font-weight: 200;
-  font-style: normal;
 }
 
 @layer base {
