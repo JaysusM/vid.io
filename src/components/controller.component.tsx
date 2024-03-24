@@ -10,6 +10,7 @@ import { RecordIcon, StopIcon } from "ui/icons";
 enum RecordingStatus {
   NONE = "NONE",
   RECORDING = "RECORDING",
+  RECORDED = "RECORDED",
 }
 
 const Controller = () => {
@@ -17,8 +18,7 @@ const Controller = () => {
   const [, setVideo] = useVideoContext();
   const [startRecord, stopRecord, canRecord] = useScreenRecordController({
     onStopRecording: (video) => {
-      console.log("Recording stopped");
-      console.log({ video });
+      setRecordingStatus(RecordingStatus.RECORDED);
       setVideo(video);
       router.push(`/video/preview`);
     },

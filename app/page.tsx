@@ -1,4 +1,4 @@
-import Controller from "@components/controller/controller.component";
+import Controller from "@components/controller.component";
 
 export default function Home() {
   return (

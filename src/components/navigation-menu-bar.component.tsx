@@ -41,21 +41,17 @@ const NavigationMenuBar = () => {
   const { user } = useUser();
 
   return (
-    <NavigationMenu
-      style={{
-        minHeight: "5vh",
-        maxHeight: "5vh",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        marginRight: "20px",
-        marginTop: "20px",
-        alignItems: "center",
-        marginLeft: "auto",
-      }}
-    >
+    <NavigationMenu className="min-h-[5vh] max-h-[5vh] min-w-full flex flex-row justify-end mr-[20px] mt-[20px] items-center">
+      <Link
+        href="/"
+        passHref
+        className="select-none title flex flex-row justify-end items-end mr-auto ml-[20px]"
+      >
+        <h2>VID</h2>
+        <span className="pb-[4px]">.IO</span>
+      </Link>
       <NavigationMenuList>
-        <NavigationMenuItem>
+        <NavigationMenuItem className="mr-[15px]">
           {!user && (
             <Link href="/api/auth/login" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -65,16 +61,13 @@ const NavigationMenuBar = () => {
           )}
           {user && (
             <>
-              <NavigationMenuTrigger>
+              <NavigationMenuTrigger className="relative">
                 <Image
                   src={user.picture || "/default_avatar.jpeg"}
                   alt="user profile picture"
                   height={25}
                   width={25}
-                  style={{
-                    borderRadius: "100%",
-                    marginRight: "10px",
-                  }}
+                  className="rounded-full mr-[10px]"
                 />
                 {user.name}
               </NavigationMenuTrigger>

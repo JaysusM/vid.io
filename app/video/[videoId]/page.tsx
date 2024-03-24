@@ -1,49 +1,43 @@
+import ShareButton from "@components/share-button.component";
 import { User, Video } from "@models/models";
 import Database from "@utils/db";
+import { getDistanceDate } from "@utils/utils";
 import Image from "next/image";
 
 const VideoPage = async ({ params }: { params: { videoId: string } }) => {
   await Database.connect();
   const video = await Video.findById(params.videoId);
-  const user = await User.findById(video?.userId);
+  const author = await User.findById(video?.userId);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <div className="flex flex-col justify-start items-center min-h-[calc(95vh-40px)] mt-[15px]">
       {video?.url ? (
         <>
-          <h1 style={{ textAlign: "center", color: "#333", fontSize: "2em" }}>
-            {video.name}
-          </h1>
           <video
             src={video.url}
             controls
-            style={{ maxWidth: "80%", height: "auto" }}
+            className="max-w-[80%] rounded-t-xl p-[20px] bg-[#38383838]"
           />
-          {user && (
-            <div
-              style={{
-                marginTop: "20px",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
+          {author && (
+            <div className="min-w-[80%] max-w-[80%] px-[30px] pt-[5px] pb-[20px] flex flex-row justify-start items-center bg-[#38383838] rounded-b-xl">
               <Image
-                src={user.picture || "/default_avatar.jpeg"}
+                src={author.picture || "/default_avatar.jpeg"}
                 alt="Profile"
-                width={50}
-                height={50}
-                style={{ borderRadius: "50%" }}
+                width={40}
+                height={40}
+                className="rounded-full"
               />
-              <p style={{ marginTop: "10px" }}>Created by {user.name}</p>
+              <p className="ml-[10px]">
+                Created by {author.name} • {getDistanceDate(video.createdAt)}
+              </p>
+              <div className="ml-auto">
+                <ShareButton videoId={params.videoId} />
+              </div>
             </div>
           )}
         </>
       ) : (
-        <h1 style={{ textAlign: "center", color: "#333", fontSize: "2em" }}>
-          Video not found
-        </h1>
+        <h1 className="text-center text-gray-700 text-2xl">Video not found</h1>
       )}
     </div>
   );

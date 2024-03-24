@@ -1,12 +1,9 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useVideoContext } from "@context/video-context.provider";
-import { Button } from "@ui/button";
 import { Progress } from "@ui/progress";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
-import { ShareIcon } from "ui/icons";
 
 enum UploadStatus {
   None = "none",
@@ -59,7 +56,7 @@ const UploadPage = () => {
             });
 
             setTimeout(() => {
-              setStatus(UploadStatus.Completed);
+              router.push(`/video/${data.video._id}`);
             }, 1000);
           });
       });
@@ -95,15 +92,6 @@ const UploadPage = () => {
     }
   }, [status]);
 
-  const copyShareLink = () => {
-    if (video?.id) {
-      const shareUrl = `${window.location.origin}/video/${video.id}`;
-      navigator.clipboard.writeText(shareUrl);
-
-      toast.info("Link copied to clipboard");
-    }
-  };
-
   return (
     <div className="min-h-[calc(95vh-30px)] flex min-w-screen justify-center items-center">
       <div className="flex flex-col min-w-[300px] justify-center items-center gap-3">
@@ -111,18 +99,6 @@ const UploadPage = () => {
           <>
             <a>{message}</a>
             <Progress value={value} />
-          </>
-        )}
-        {status === UploadStatus.Completed && (
-          <>
-            <video
-              src={video?.url}
-              controls
-              className="max-w-[70vw] min-w-[70vw] transition-opacity"
-            />
-            <Button onClick={copyShareLink}>
-              Copy share link <ShareIcon size="20px" />
-            </Button>
           </>
         )}
       </div>
