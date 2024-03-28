@@ -20,8 +20,9 @@ const getData = async (
   const session = await getSession();
   const videoKey = author?.email + "/" + video?.name;
   const videoUrl = await AWS.getFile(videoKey);
+
   return {
-    video: { ...video, url: videoUrl },
+    video: { ...video?.toObject(), url: videoUrl },
     author,
     isAuthor: author.email === session?.user.email,
   };
