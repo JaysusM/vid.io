@@ -26,11 +26,12 @@ const MyLibraryPage = async () => {
         {videos.map((video, key) => (
           <VideoThumbnail
             videoId={video.id}
-            videoUrl={video.url}
+            videoThumbnail={video.thumbnail}
             createdAt={video.createdAt}
             key={key}
           />
         ))}
+        {videos.length === 0 && <p>No videos found</p>}
       </div>
     </div>
   );

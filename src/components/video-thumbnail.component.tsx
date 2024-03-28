@@ -1,18 +1,19 @@
 "use client";
 import { getDistanceDate } from "@utils/utils";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PlayIcon } from "ui/icons";
 
 interface VideoThumbnailProps {
   videoId: string;
-  videoUrl: string;
+  videoThumbnail: string;
   createdAt: string;
   key: string | number;
 }
 
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
   videoId,
-  videoUrl,
+  videoThumbnail,
   createdAt,
   key,
 }) => {
@@ -28,9 +29,10 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
         className="relative flex flex-col justify-center rounded-md shadow-md cursor-pointer"
         onClick={() => handleVideoClick(videoId)}
       >
-        <video
+        <img
           className="aspect-video object-cover rounded-t-xl"
-          src={videoUrl}
+          src={videoThumbnail}
+          alt="video-thumbnail"
         />
         <div className="bg-[rgb(31,36,56)] py-[5px] px-[10px] rounded-b-xl">
           <p>Recorded {getDistanceDate(createdAt)}</p>

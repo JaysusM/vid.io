@@ -34,7 +34,7 @@ const VideoPage = async ({ params }: { params: { videoId: string } }) => {
       <video
         src={video.url}
         controls
-        className="max-w-[80%] rounded-t-xl p-[20px] bg-[#38383838]"
+        className="max-w-[80%] min-w-[80%] rounded-t-xl p-[20px] bg-[#38383838]"
       />
       <div className="min-w-[80%] max-w-[80%] px-[30px] pt-[5px] pb-[20px] flex flex-row justify-start items-center bg-[#38383838] rounded-b-xl">
         <Image
