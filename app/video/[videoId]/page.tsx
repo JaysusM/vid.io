@@ -1,17 +1,30 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import DownloadButton from "@components/download-button.component";
 import ShareButton from "@components/share-button.component";
-import { User, Video } from "@models/models";
+import { User, Video, type UserModel, type VideoModel } from "@models/models";
+import { AWS } from "@utils/aws";
 import Database from "@utils/db";
 import { getDistanceDate } from "@utils/utils";
 import Image from "next/image";
 
-const getData = async (videoId: string) => {
+const getData = async (
+  videoId: string
+): Promise<{
+  video: VideoModel & { url: string };
+  author: UserModel;
+  isAuthor: boolean;
+}> => {
   await Database.connect();
   const video = await Video.findById(videoId);
   const author = await User.findById(video?.userId);
   const session = await getSession();
-  return { video, author, isAuthor: author.email === session?.user.email };
+  const videoKey = author?.email + "/" + video?.name;
+  const videoUrl = await AWS.getFile(videoKey);
+  return {
+    video: { ...video, url: videoUrl },
+    author,
+    isAuthor: author.email === session?.user.email,
+  };
 };
 const VideoPage = async ({ params }: { params: { videoId: string } }) => {
   const { video, author, isAuthor } = await getData(params.videoId);

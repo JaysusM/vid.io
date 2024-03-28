@@ -13,11 +13,7 @@ export class AWS {
                 ContentType: 'video/mp4',
             });
             await this.s3Client.send(command);
-            const url = getSignedUrl(this.s3Client, new GetObjectCommand({
-                Bucket: 'vidios',
-                Key: key,
-            }));
-            return url;
+            return true;
         } catch (error) {
             console.error('Error uploading file: ', error);
             throw error;
@@ -26,12 +22,11 @@ export class AWS {
 
     public static async getFile(key: string) {
         try {
-            const command = new GetObjectCommand({
+            const url = getSignedUrl(this.s3Client, new GetObjectCommand({
                 Bucket: 'vidios',
                 Key: key,
-            });
-            const response = await this.s3Client.send(command);
-            return response;
+            }));
+            return url;
         } catch (error) {
             console.error('Error getting file: ', error);
             throw error;

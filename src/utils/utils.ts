@@ -14,7 +14,7 @@ export const isBlobLargerThanInMb = (file: Blob, size: number) => {
     return (fileSizeInMegabytes > size);
 }
 
-export const getDistanceDate = (date: string) => {
+export const getDistanceDate = (date: string | Date) => {
     if (!date) return '';
     return formatDistance(date, new Date(), { addSuffix: true })
 }

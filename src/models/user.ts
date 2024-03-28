@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
 
+export interface UserModel {
+    name: string;
+    nickname: string;
+    email: string;
+    picture: string;
+}
+
 const userSchema = new mongoose.Schema({
     name: String,
     nickname: String,

@@ -12,10 +12,11 @@ export async function POST(request: Request): Promise<NextResponse> {
     const user = await User.findOne({ email: userEmail });
 
     if (user) {
-        const url = await AWS.uploadFile(videoName!, Buffer.from(await request.arrayBuffer()));
+        const key = user.email + '/' + videoName!;
+        await AWS.uploadFile(key, Buffer.from(await request.arrayBuffer()));
 
         const video = new Video({
-            url: url,
+            key,
             userId: user._id,
             name: videoName
         });

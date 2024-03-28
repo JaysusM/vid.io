@@ -1,4 +1,4 @@
-import User from '@models/user';
-import Video from '@models/video';
+import User, { UserModel } from '@models/user';
+import Video, { VideoModel } from '@models/video';
 
-export { User, Video };
+export { User, Video, type VideoModel, type UserModel };

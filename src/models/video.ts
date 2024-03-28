@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
 
+export interface VideoModel {
+    key: string;
+    userId: string;
+    name: string;
+    createdAt: Date;
+}
+
 const videoSchema = new mongoose.Schema({
-    url: String,
+    key: String,
     userId: String,
     name: String,
 }, { timestamps: true });
