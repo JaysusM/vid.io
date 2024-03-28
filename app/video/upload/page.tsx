@@ -15,6 +15,7 @@ enum UploadStatus {
   Transcoding = "transcoding",
   Done = "done",
   Completed = "completed",
+  Error = "error",
 }
 
 const UploadPage = () => {
@@ -112,6 +113,8 @@ const UploadPage = () => {
         return "Transcoding...";
       case UploadStatus.Done:
         return "Done!";
+      case UploadStatus.Error:
+        return "Ooops! Something went wrong!";
       default:
         return "";
     }
