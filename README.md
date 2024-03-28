@@ -49,7 +49,7 @@ To run vid.io locally, make sure you have npm installed. Then, follow these step
 - Tailwind CSS
 - Next.js 14
 - Auth0
-- Vercel Blob Storage (with potential to change to S3)
+- Amazon S3
 - Shadcn Components
 
 ## Deployment
@@ -90,10 +90,22 @@ To run vid.io locally, make sure you have npm installed. Then, follow these step
    npm install
    ```
 
-3. Configure Auth0:
+3. Configure environment variables:
 
-   - Create an Auth0 account and set up a new application.
-   - Update the Auth0 configuration in the `.env` file.
+- Create a .env.local file in the root directory of the project.
+
+- Fill in the necessary environment variables:
+
+```bash
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+MONGODB_URI=
+AUTH0_SECRET=
+AUTH0_BASE_URL='http://localhost:3000'
+AUTH0_ISSUER_BASE_URL=
+AUTH0_CLIENT_ID=
+AUTH0_CLIENT_SECRET=
+```
 
 4. Start the development server:
 

@@ -1,7 +1,7 @@
-import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { User, Video } from '@models/models';
 import Database from '@utils/db';
+import { AWS } from '@utils/aws';
 
 export async function POST(request: Request): Promise<NextResponse> {
     await Database.connect();
@@ -12,12 +12,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     const user = await User.findOne({ email: userEmail });
 
     if (user) {
-        const blob = await put(videoName!, request.body!, {
-            access: 'public',
-        });
+        const url = await AWS.uploadFile(videoName!, Buffer.from(await request.arrayBuffer()));
 
         const video = new Video({
-            url: blob.url,
+            url: url,
             userId: user._id,
             name: videoName
         });
