@@ -71,7 +71,7 @@ vid.io is a user-friendly app that allows you to easily capture your screen and 
 - **Secure Login**: Login securely using Auth0 authentication.
 - **Storage**: Store your captured clips in Vercel Blob storage (with potential to change to S3).
 - **Sleek UI**: Enjoy a modern and visually appealing user interface with Shadcn components.
-- **File Size Limit**: Please note that the maximum file size for uploads is 20MB.
+- **File Size Limit**: Please note that the maximum file size for uploads is 100MB.
 
 ## Installation
 
