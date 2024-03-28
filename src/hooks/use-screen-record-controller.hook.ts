@@ -52,13 +52,15 @@ const useScreenRecordController = ({ onStopRecording, onError }: ScreenRecordCon
         try {
             const mediaStream = await navigator.mediaDevices.getDisplayMedia({
                 video: {
-                    frameRate: { ideal: 30 }
+                    frameRate: { ideal: 30, max: 30 },
+                    width: { ideal: 960, max: 960 },
+                    height: { ideal: 540, max: 540 },
                 },
                 audio: true
             });
 
             const mediaRecorder = new MediaRecorder(mediaStream, {
-                mimeType: 'video/webm;codecs=vp8,opus'
+                mimeType: 'video/webm;codecs=av1,opus'
             });
 
             mediaRecorder.start();
