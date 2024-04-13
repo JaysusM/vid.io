@@ -4,3 +4,4 @@ export { default as DownloadIcon } from './download.icon';
 export { default as PlayIcon } from './play.icon';
 export { default as ShareIcon } from './share.icon';
 export { default as CopyIcon } from './copy.icon';
+export { default as DownIcon } from './down.icon';

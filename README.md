@@ -69,7 +69,7 @@ vid.io is a user-friendly app that allows you to easily capture your screen and 
 - **Screen Capture**: Capture your screen and record clips effortlessly.
 - **Share Clips**: Share the captured clips with others seamlessly.
 - **Secure Login**: Login securely using Auth0 authentication.
-- **Storage**: Store your captured clips in Vercel Blob storage (with potential to change to S3).
+- **Storage**: Store your captured clips in Amazon S3 (previously Vercel Blob Storage).
 - **Sleek UI**: Enjoy a modern and visually appealing user interface with Shadcn components.
 - **File Size Limit**: Please note that the maximum file size for uploads is 100MB.
 
@@ -120,7 +120,7 @@ AUTH0_CLIENT_SECRET=
 - Tailwind CSS
 - Next.js 14
 - Auth0
-- Vercel Blob Storage (with potential to change to S3)
+- Amazon Web Services (previously Vercel Blob Storage)
 - ShadCN Components
 
 ## Deployment

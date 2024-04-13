@@ -47,7 +47,7 @@ const NavigationMenuBar = () => {
   const { user } = useUser();
 
   return (
-    <NavigationMenu className="min-h-[5vh] max-h-[5vh] min-w-full flex flex-row justify-end mr-[20px] mt-[20px] items-center">
+    <NavigationMenu className="absolute top-0 left-0 min-h-[5vh] max-h-[5vh] min-w-[calc(100vw-20px)] flex flex-row justify-end mr-[20px] mt-[20px] items-center">
       <Link
         href="/"
         passHref
