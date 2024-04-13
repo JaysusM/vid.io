@@ -4,14 +4,13 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class AWS {
     public static s3Client = new S3Client({ region: 'eu-west-3' });
 
-    public static async uploadFile(key: string, body: Buffer, expirationDate?: Date) {
+    public static async uploadFile(key: string, body: Buffer) {
         try {
             const command = new PutObjectCommand({
                 Bucket: 'vidios',
                 Key: key,
                 Body: body,
                 ContentType: 'video/mp4',
-                Expires: expirationDate,
             });
             await this.s3Client.send(command);
             return true;

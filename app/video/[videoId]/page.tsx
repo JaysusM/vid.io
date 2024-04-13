@@ -49,7 +49,7 @@ const VideoPage = async ({ params }: { params: { videoId: string } }) => {
           This video has expired and is no longer available.
         </h2>
         <h3 className="my-3">
-          Videos from unknown users are deleted after 6 hours.
+          Videos from unknown users are deleted after ~1 day.
         </h3>
         <Button>
           <a href="/">Go To Main Page</a>

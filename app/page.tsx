@@ -52,7 +52,7 @@ export default function Home() {
           </h1>
           <div className="flex justify-center">
             <h3 className="mt-5 text-left">
-              💣 Non Authenticated Users Clips Expires After 6 Hours
+              💣 Non Authenticated Users Clips Expires After ~1 day
               <br />
               😎 Authenticated Users Clips are Shareable FOREVER
               <br />

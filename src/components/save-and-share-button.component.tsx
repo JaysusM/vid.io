@@ -36,7 +36,7 @@ const SaveAndShareButton = () => {
             </TooltipTrigger>
             <TooltipContent>
               <p className="text-center">
-                6 Hours Expiration
+                ~24 Hours Expiration
                 <br />
                 Log In To Keep Videos Forever
               </p>

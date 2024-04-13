@@ -19,8 +19,12 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     if ((session && user && session.user.email === userEmail) || !user) {
         const key = user ? user.email + '/' + videoName! : 'temp/' + videoName!;
-        const expirationDate = user ? undefined : new Date(Date.now() + 6 * 60 * 60 * 1000);
-        await AWS.uploadFile(key, Buffer.from(await request.arrayBuffer()), expirationDate);
+        await AWS.uploadFile(key, Buffer.from(await request.arrayBuffer()));
+
+        // Expiration Date is next next day at 00:00
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 2);
+        expirationDate.setHours(0, 0, 0, 0);
 
         const video = new Video({
             key,
