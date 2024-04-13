@@ -42,9 +42,9 @@ const Controller = () => {
   if (!canRecord) {
     return (
       <Alert>
-        <AlertTitle>Browser doesn&apos;t support recording.</AlertTitle>
+        <AlertTitle>Browser doesn&apos;t Support Recording.</AlertTitle>
         <AlertDescription>
-          Please try again using a different browser.
+          Please Try Again Using a Different Browser.
         </AlertDescription>
       </Alert>
     );
@@ -54,12 +54,12 @@ const Controller = () => {
     <>
       {recordingStatus === RecordingStatus.NONE && (
         <Button onClick={handleRecordStart}>
-          Record your screen! <RecordIcon size="20px" className="ml-2" />
+          Record Your Screen! <RecordIcon size="20px" className="ml-2" />
         </Button>
       )}
       {recordingStatus === RecordingStatus.RECORDING && (
         <Button onClick={handleRecordStop} className="animate-pulse">
-          Stop recording <StopIcon size="20px" className="ml-2" />
+          Stop Recording <StopIcon size="20px" className="ml-2" />
         </Button>
       )}
     </>

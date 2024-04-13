@@ -1,4 +1,4 @@
-import { formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 
 export const hash = async (str: string): Promise<string> => {
     const hash = await crypto.subtle
@@ -17,4 +17,9 @@ export const isBlobLargerThanInMb = (file: Blob, size: number) => {
 export const getDistanceDate = (date: string | Date) => {
     if (!date) return '';
     return formatDistance(date, new Date(), { addSuffix: true })
+}
+
+export const getBeautifiedDate = (date: string | Date) => {
+    if (!date) return '';
+    return format(date, 'HH:mm MMMM do, yyyy');
 }

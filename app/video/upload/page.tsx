@@ -4,7 +4,6 @@ import { useVideoContext } from "@context/video-context.provider";
 import useCreateThumbnail from "@hooks/use-create-thumbnail.hook";
 import { VideoModel } from "@models/video";
 import { Progress } from "@ui/progress";
-import { transcode } from "buffer";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -28,9 +27,11 @@ const UploadPage = () => {
   const uploadBlobFile = async (
     blob: Blob
   ): Promise<VideoModel & { _id: string }> => {
+    const userEmail = user?.email || "unknown";
+    const expiration = user ? "forever" : "6h";
     const newVideoName = video!.name.split(".webm").join(".mp4");
     const response = await fetch(
-      `/api/video/upload?videoName=${newVideoName}&userEmail=${user!.email}`,
+      `/api/video/upload?videoName=${newVideoName}&userEmail=${userEmail}&expiration=${expiration}`,
       {
         method: "POST",
         body: blob,
@@ -43,10 +44,12 @@ const UploadPage = () => {
 
   const createAndUploadThumbnail = async (
     blob: Blob
-  ): Promise<VideoModel & { _id: string }> => {
+  ): Promise<(VideoModel & { _id: string }) | undefined> => {
+    if (!user) return;
+
     const newVideoName = video!.name.split(".webm").join(".mp4");
     const response = await fetch(
-      `/api/video/upload?videoName=${newVideoName}&userEmail=${user!.email}`,
+      `/api/video/upload?videoName=${newVideoName}&userEmail=${user.email}`,
       {
         method: "POST",
         body: blob,
@@ -74,7 +77,7 @@ const UploadPage = () => {
   };
 
   useEffect(() => {
-    if (!video || !user) {
+    if (!video) {
       return router.push("/");
     }
 
@@ -136,7 +139,7 @@ const UploadPage = () => {
   }, [status]);
 
   return (
-    <div className="min-h-[calc(95vh-30px)] flex min-w-screen justify-center items-center">
+    <div className="min-h-[calc(100vh-10px)] flex min-w-screen justify-center items-center">
       <div className="flex flex-col min-w-[300px] justify-center items-center gap-3">
         {status !== UploadStatus.Completed && (
           <>

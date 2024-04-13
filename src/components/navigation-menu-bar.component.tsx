@@ -44,7 +44,7 @@ const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
 ListItem.displayName = "ListItem";
 
 const NavigationMenuBar = () => {
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
 
   return (
     <NavigationMenu className="absolute top-0 left-0 min-h-[5vh] max-h-[5vh] min-w-[calc(100vw-20px)] flex flex-row justify-end mr-[20px] mt-[20px] items-center">
@@ -58,7 +58,7 @@ const NavigationMenuBar = () => {
       </Link>
       <NavigationMenuList>
         <NavigationMenuItem className="mr-[15px]">
-          {!user && (
+          {!user && !isLoading && (
             <Link href="/api/auth/login" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Sign In

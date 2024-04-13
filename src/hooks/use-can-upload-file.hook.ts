@@ -4,14 +4,14 @@ import { isBlobLargerThanInMb } from '@utils/utils';
 
 const MAXIMUM_FILE_SIZE = 100;
 
-const useCanUploadFile = (): [boolean, string | undefined] => {
+const useCanUploadFile = (): ['yes' | 'no' | 'limited', string | undefined] => {
     const [video] = useVideoContext();
     const { user } = useUser();
 
-    if (!user) return [false, "You need to be logged in to upload a video"];
-    if (!video?.file) return [false, "No video to upload"];
-    if (isBlobLargerThanInMb(video?.file, MAXIMUM_FILE_SIZE)) return [false, "Video is too large to upload"];
-    return [true, undefined];
+    if (!user) return ['limited', undefined];
+    if (!video?.file) return ['no', "No video to upload"];
+    if (isBlobLargerThanInMb(video?.file, MAXIMUM_FILE_SIZE)) return ['no', "Video is too large to upload"];
+    return ['yes', undefined];
 }
 
 export default useCanUploadFile;

@@ -13,16 +13,20 @@ export async function POST(request: Request): Promise<NextResponse> {
     const videoName = searchParams.get('videoName');
     const userEmail = searchParams.get('userEmail');
 
-    const user = await User.findOne({ email: userEmail });
+    let user;
+    if (userEmail !== 'unknown')
+        user = await User.findOne({ email: userEmail });
 
-    if (session && user && session.user.email === userEmail) {
-        const key = user.email + '/' + videoName!;
-        await AWS.uploadFile(key, Buffer.from(await request.arrayBuffer()));
+    if ((session && user && session.user.email === userEmail) || !user) {
+        const key = user ? user.email + '/' + videoName! : 'temp/' + videoName!;
+        const expirationDate = user ? undefined : new Date(Date.now() + 6 * 60 * 60 * 1000);
+        await AWS.uploadFile(key, Buffer.from(await request.arrayBuffer()), expirationDate);
 
         const video = new Video({
             key,
-            userId: user._id,
-            name: videoName
+            userId: user?._id,
+            name: videoName,
+            expiresAt: expirationDate,
         });
 
         await video.save();

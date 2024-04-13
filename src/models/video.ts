@@ -6,6 +6,7 @@ export interface VideoModel {
     name: string;
     thumbnail: string;
     createdAt: Date;
+    expiresAt?: Date;
 }
 
 const videoSchema = new mongoose.Schema({
@@ -13,6 +14,7 @@ const videoSchema = new mongoose.Schema({
     userId: String,
     name: String,
     thumbnail: String,
+    expiresAt: Date,
 }, { timestamps: true });
 
 const Video = mongoose.models.Video || mongoose.model('Video', videoSchema);

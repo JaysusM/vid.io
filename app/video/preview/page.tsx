@@ -7,7 +7,7 @@ import { RecordIcon } from "ui/icons";
 
 const VideoPreviewPage = () => {
   return (
-    <div className="flex flex-row justify-center items-center min-h-[calc(95vh-30px)] w-full gap-10">
+    <div className="flex flex-row justify-center items-center min-h-[calc(100vh-10px)] w-full gap-10">
       <VideoContextPreview />
       <div className="flex flex-col justify-center items-center gap-3">
         <DownloadButton className="min-w-full" />
