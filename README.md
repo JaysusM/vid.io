@@ -12,7 +12,8 @@ VID.io is an app that allows you to capture your screen and share clips with you
 
 ## Limitations:
 
-- Only files under 20MB can be uploaded to be shared.
+- Non Authenticated users clips expires after 6 hours.
+- Only files under 100MB can be uploaded to be shared.
 
 ## Installation
 
