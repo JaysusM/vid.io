@@ -8,7 +8,7 @@ export const transcodeToMP4 = async (file: Blob): Promise<Buffer> => {
     const outputPath = `${uuidv4()}.mp4`;
 
     const fileBuffer = await file.arrayBuffer();
-    fs.writeFileSync(inputPath, new Buffer(fileBuffer));
+    fs.writeFileSync(inputPath, Buffer.from(fileBuffer));
 
     await new Promise((resolve, reject) => {
         ffmpeg(inputPath)
