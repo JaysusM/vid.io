@@ -9,6 +9,7 @@ VID.io is an app that allows you to capture your screen and share clips with you
 - Login with Auth0: Securely authenticate users with Auth0.
 - Storage: Store the captured clips in Amazon S3 (previously Vercel Blob).
 - UI components: Utilize the Shadcn components for a sleek and modern user interface.
+- Transcoding with FFmpeg: Transcode the clips to a common format for easy sharing.
 
 ## Limitations:
 
@@ -22,15 +23,14 @@ To run vid.io locally, make sure you have npm installed. Then, follow these step
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/JaysusM/vid.io.git
+   git clone
    ```
 
-2. Install the dependencies:
+2. Generate the necessary keys from third-party services:
 
-   ```bash
-   cd vid.io
-   npm install
-   ```
+- Create an account on [Auth0](https://auth0.com/).
+- Create an account on [Amazon Web Services](https://aws.amazon.com/).
+- Create a MongoDB database on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
 
 3. Configure environment variables:
 
@@ -38,24 +38,30 @@ To run vid.io locally, make sure you have npm installed. Then, follow these step
 
 - Fill in the necessary environment variables:
 
-```bash
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-MONGODB_URI=
-AUTH0_SECRET=
-AUTH0_BASE_URL='http://localhost:3000'
-AUTH0_ISSUER_BASE_URL=
-AUTH0_CLIENT_ID=
-AUTH0_CLIENT_SECRET=
-```
+  ```bash
+  AWS_ACCESS_KEY_ID=
+  AWS_SECRET_ACCESS_KEY=
+  MONGODB_URI=
+  AUTH0_SECRET=
+  AUTH0_BASE_URL='http://localhost:3000'
+  AUTH0_ISSUER_BASE_URL=
+  AUTH0_CLIENT_ID=
+  AUTH0_CLIENT_SECRET=
+  ```
 
-4. Start the development server:
+4. Build the Docker image:
 
    ```bash
-   npm run dev
+   docker build -t vid.io .
    ```
 
-5. Open your browser and navigate to `http://localhost:3000` to access vid.io.
+5. Run the Docker container:
+
+   ```bash
+   docker run -p 3000:3000 vid.io
+   ```
+
+6. Open your browser and navigate to `http://localhost:3000` to access vid.io.
 
 ## Technologies Used
 
@@ -64,6 +70,9 @@ AUTH0_CLIENT_SECRET=
 - Auth0
 - Amazon S3
 - Shadcn Components
+- FFmpeg
+- MongoDB
+- Docker
 
 ## Deployment
 

@@ -3,7 +3,7 @@
     width: 100%;
     height: 100vh;
     scroll-behavior: smooth;
-    overflow: auto;
+    overflow-y: scroll;
     scroll-snap-type: y mandatory;
 }
 

@@ -56,7 +56,7 @@ export default function Home() {
               <br />
               😎 Authenticated Users Clips are Shareable FOREVER
               <br />
-              🔒 Maximum Shareable Clip Size Is 100Mb (Raw, Not Transcoded)
+              🔒 Maximum Shareable Clip Size Is 100Mb*
               <br />
             </h3>
           </div>
