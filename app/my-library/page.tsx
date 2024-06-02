@@ -13,7 +13,7 @@ const getData = async () => {
   const user = await User.findOne({ email: session.user.email });
 
   if (!user) throw new Error("User not found");
-  return { user, videos: [] };
+
   const videos = await Video.find({ userId: user.id }, null, {
     sort: { createdAt: -1 },
   });
